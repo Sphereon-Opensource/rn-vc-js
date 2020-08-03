@@ -69,7 +69,7 @@ To generate an **Ed25519** key pair and corresponding signature suite (see
 parameters, such as generating from a deterministic key seed):
 
 ```js
-const {Ed25519KeyPair, suites: {Ed25519Signature2018}} = require('jsonld-signatures');
+const {Ed25519KeyPair, suites: {Ed25519Signature2018}} = require('react-native-jsonld-signatures');
 
 const keyPair = await Ed25519KeyPair.generate();
 keyPair.id = 'https://example.edu/issuers/keys/1'; // See Key ID section

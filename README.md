@@ -181,7 +181,7 @@ Pre-requisites:
 // by requiring this first you ensure security
 // contexts are loaded from jsonld-signatures
 // and not an insecure source.
-const {extendContextLoader} = require('jsonld-signatures');
+const {extendContextLoader} = require('react-native-jsonld-signatures');
 const vc = require('vc-js');
 // vc-js exports its own secure documentLoader.
 const {defaultDocumentLoader} = vc;
