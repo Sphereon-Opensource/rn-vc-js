@@ -2,11 +2,10 @@
   <br>
   <a href="https://www.sphereon.com"><img src="https://sphereon.com/content/themes/sphereon/assets/img/logo.svg" alt="Sphereon" width="400"></a>
   <br>
-  Verifiable Credentials JS Library (react-native-vc-js)
+  A React Native compatible implementation of W3C Verifiable Credentials standard
   <br>
 </h1>
 
-> A Javascript library for issuing and verifying Verifiable Credentials
 
 ## Table of Contents
 
