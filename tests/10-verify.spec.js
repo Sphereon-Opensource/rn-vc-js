@@ -2,7 +2,7 @@ const chai = require('chai');
 const should = chai.should();
 
 const {Ed25519KeyPair} = require('crypto-ld');
-const jsigs = require('jsonld-signatures');
+const jsigs = require('react-native-jsonld-signatures');
 const jsonld = require('jsonld');
 const {Ed25519Signature2018} = jsigs.suites;
 const CredentialIssuancePurpose = require('../lib/CredentialIssuancePurpose');

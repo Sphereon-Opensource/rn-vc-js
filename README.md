@@ -1,9 +1,11 @@
-# Verifiable Credentials JS Library _(vc-js)_
+<h1 align="center">
+  <br>
+  <a href="https://www.sphereon.com"><img src="https://sphereon.com/content/themes/sphereon/assets/img/logo.svg" alt="Sphereon" width="400"></a>
+  <br>
+  A React Native compatible implementation of W3C Verifiable Credentials standard
+  <br>
+</h1>
 
-[![Build Status](https://travis-ci.org/digitalbazaar/vc-js.png?branch=master)](https://travis-ci.org/digitalbazaar/vc-js)
-[![NPM Version](https://img.shields.io/npm/v/vc-js.svg?style=flat-square)](https://npm.im/vc-js)
-
-> A Javascript library for issuing and verifying Verifiable Credentials
 
 ## Table of Contents
 
@@ -25,7 +27,7 @@ credentials, and so on.)
 
 ## Background
 
-This library is a Javascript (Node.js and browser) implementation of the
+This library is a Javascript (React Native) implementation of the
 [Verifiable Credentials Data Model 1.0](https://w3c.github.io/vc-data-model/)
 specification (the JWT serialization is not currently supported).
 
@@ -181,7 +183,7 @@ Pre-requisites:
 // by requiring this first you ensure security
 // contexts are loaded from jsonld-signatures
 // and not an insecure source.
-const {extendContextLoader} = require('jsonld-signatures');
+const {extendContextLoader} = require('react-native-jsonld-signatures');
 const vc = require('vc-js');
 // vc-js exports its own secure documentLoader.
 const {defaultDocumentLoader} = vc;
@@ -352,6 +354,13 @@ To run Karma (in-browser) tests:
 
 ```
 npm run test-karma
+```
+
+## Releasing
+Use the following commands to authenticate with Nexus and publish:
+```
+npm adduser --registry=https://nexus.qa.sphereon.com/repository/sphereon-opensource-npm/
+npm publish
 ```
 
 ## Contribute
