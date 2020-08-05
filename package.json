@@ -1,8 +1,8 @@
 {
-  "name": "vc-js",
+  "name": "react-native-vc-js",
   "version": "0.6.5-0",
   "description": "Verifiable Credentials JavaScript library.",
-  "homepage": "https://github.com/digitalbazaar/vc-js",
+  "homepage": "https://github.com/Sphereon-Opensource/react-native-vc-js",
   "author": {
     "name": "Digital Bazaar, Inc.",
     "email": "support@digitalbazaar.com",
@@ -15,10 +15,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/digitalbazaar/vc-js"
+    "url": "https://github.com/Sphereon-Opensource/react-native-vc-js"
   },
   "bugs": {
-    "url": "https://github.com/digitalbazaar/vc-js/issues",
+    "url": "https://github.com/Sphereon-Opensource/react-native-vc-js/issues",
     "email": "support@digitalbazaar.com"
   },
   "license": "BSD-3-Clause",
@@ -112,5 +112,15 @@
     "coverage": "cross-env NODE_ENV=test nyc --reporter=lcov --reporter=text-summary npm run test-node",
     "coverage-ci": "cross-env NODE_ENV=test nyc --reporter=text-lcov npm run test-node > coverage.lcov",
     "coverage-report": "nyc report"
-  }
+  },
+  "bundledDependencies": [
+    "commander",
+    "react-native-credentials-context",
+    "debug",
+    "fs-extra",
+    "get-stdin",
+    "jsonld",
+    "react-native-jsonld-signatures",
+    "supports-color"
+  ]
 }
