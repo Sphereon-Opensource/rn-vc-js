@@ -23,73 +23,68 @@
   },
   "license": "BSD-3-Clause",
   "main": "lib/index.js",
-  "bin": {
-    "vc-js": "bin/vc-js"
-  },
   "files": [
-    "bin/vc-js",
-    "dist/*.js",
-    "dist/*.js.map",
-    "lib/*.js",
-    "lib/contexts"
+    "lib/**/*.js"
   ],
   "dependencies": {
-    "commander": "^2.20.3",
     "react-native-credentials-context": "1.0.1-0",
+    "jsonld-signatures": "^9.0.2",
     "debug": "^4.1.1",
     "fs-extra": "^8.1.0",
     "get-stdin": "^7.0.0",
-    "jsonld": "^2.0.2",
+    "jsonld": "^5.2.0",
     "react-native-jsonld-signatures": "5.1.1-0",
     "supports-color": "^7.1.0"
   },
-  "browser": {
-    "bs58": false,
-    "crypto": false,
-    "sodium-native": false,
-    "util": false
-  },
   "devDependencies": {
-    "@babel/cli": "^7.8.3",
-    "@babel/core": "^7.8.3",
-    "@babel/node": "^7.8.3",
-    "@babel/plugin-proposal-object-rest-spread": "^7.8.3",
-    "@babel/plugin-transform-modules-commonjs": "^7.8.3",
-    "@babel/plugin-transform-runtime": "^7.8.3",
-    "@babel/polyfill": "^7.8.3",
-    "@babel/preset-env": "^7.8.3",
-    "@babel/register": "^7.8.3",
-    "@babel/runtime": "^7.8.3",
-    "babel-loader": "^8.0.5",
-    "browserify": "^16.2.3",
-    "chai": "^4.1.2",
-    "core-js": "^3.6.4",
-    "cross-env": "^7.0.0",
-    "crypto-ld": "^3.7.0",
-    "did-context": "^2.0.0",
-    "did-veres-one": "^10.0.1",
-    "eslint": "^6.8.0",
-    "eslint-config-digitalbazaar": "^2.0.0",
-    "eslint-plugin-jsdoc": "^20.3.1",
-    "karma": "^4.4.1",
-    "karma-babel-preprocessor": "^8.0.0",
+    "@babel/core": "^7.13.8",
+    "@babel/plugin-transform-modules-commonjs": "^7.13.8",
+    "@babel/plugin-transform-runtime": "^7.13.9",
+    "@babel/preset-env": "^7.13.9",
+    "@babel/runtime": "^7.13.9",
+    "@digitalbazaar/ed25519-signature-2018": "^2.0.1",
+    "@digitalbazaar/ed25519-signature-2020": "^2.1.0",
+    "@digitalbazaar/ed25519-verification-key-2018": "^3.0.0",
+    "@digitalbazaar/ed25519-verification-key-2020": "^2.0.0",
+    "babel-loader": "^8.2.2",
+    "chai": "^4.3.3",
+    "cross-env": "^7.0.3",
+    "did-context": "^3.0.1",
+    "did-veres-one": "^13.0.0",
+    "eslint": "^7.21.0",
+    "eslint-config-digitalbazaar": "^2.6.1",
+    "eslint-plugin-jsdoc": "^32.2.0",
+    "karma": "^6.1.1",
+    "karma-babel-preprocessor": "^8.0.1",
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^3.1.0",
-    "karma-mocha": "^1.3.0",
+    "karma-mocha": "^2.0.1",
     "karma-mocha-reporter": "^2.2.5",
-    "karma-sourcemap-loader": "^0.3.7",
-    "karma-webpack": "^4.0.2",
-    "mocha": "^7.0.0",
-    "nyc": "^15.0.0",
-    "regenerator-runtime": "^0.13.1",
-    "uuid": "^3.4.0",
+    "karma-sourcemap-loader": "^0.3.8",
+    "karma-webpack": "^5.0.0",
+    "mocha": "^8.3.1",
+    "mocha-lcov-reporter": "^1.3.0",
+    "nyc": "^15.1.0",
+    "uuid": "^8.3.2",
     "veres-one-context": "^11.0.0",
-    "webpack": "^4.41.5",
-    "webpack-cli": "^3.3.10",
-    "webpack-merge": "^4.2.2"
+    "webpack": "^5.24.3"
+  },
+  "nyc": {
+    "exclude": [
+      "test"
+    ],
+    "reporter": [
+      "html",
+      "text-summary"
+    ]
+  },
+  "browser": {
+    "Buffer": false,
+    "crypto": false,
+    "util": false
   },
   "engines": {
-    "node": ">=8"
+    "node": ">=12"
   },
   "keywords": [
     "JSON",
@@ -101,16 +96,12 @@
     "Credential"
   ],
   "scripts": {
-    "prepublish": "npm run build",
-    "build": "webpack",
-    "fetch-test-suites": "npm run fetch-vc-test-suite",
-    "fetch-vc-test-suite": "if [ ! -e test-suites/vc-test-suite ]; then git clone --depth 1 https://github.com/digitalbazaar/vc-test-suite.git test-suites/vc-test-suite; fi",
-    "test": "bin/vc-test",
-    "test-node": "mocha ./tests/*.spec.js --opts ./tests/mocha.opts --require @babel/polyfill --require @babel/register",
+    "test": "npm run lint && npm run test-node && npm run test-karma",
+    "test-node": "cross-env NODE_ENV=test mocha --preserve-symlinks -t 10000 test/*.spec.js",
     "test-karma": "karma start karma.conf.js",
-    "lint": "eslint '*.js' 'lib/**.js' 'tests/**.js' bin/vc-js",
+    "lint": "eslint lib test/*.spec.js",
     "coverage": "cross-env NODE_ENV=test nyc --reporter=lcov --reporter=text-summary npm run test-node",
-    "coverage-ci": "cross-env NODE_ENV=test nyc --reporter=text-lcov npm run test-node > coverage.lcov",
+    "coverage-ci": "cross-env NODE_ENV=test nyc --reporter=lcovonly npm run test-node",
     "coverage-report": "nyc report"
   },
   "bundledDependencies": [
