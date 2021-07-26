@@ -1,17 +1,18 @@
 {
   "name": "react-native-vc-js",
-  "version": "0.6.5-0",
-  "description": "Verifiable Credentials JavaScript library.",
+  "version": "1.0.1-0",
+  "description": "Verifiable Credentials React Native library.",
   "homepage": "https://github.com/Sphereon-Opensource/react-native-vc-js",
   "author": {
-    "name": "Digital Bazaar, Inc.",
-    "email": "support@digitalbazaar.com",
-    "url": "https://digitalbazaar.com/"
+    "name": "Digital Bazaar, Inc., ported to RN by Sphereon",
+    "email": "support@sphereon.com",
+    "url": "https://digitalbazaar.com/, https://sphereon.com"
   },
   "contributors": [
     "Dave Longley <dlongley@digitalbazaar.com>",
     "David I. Lehn <dlehn@digitalbazaar.com>",
-    "Dmitri Zagidulin <dmitriz@digitalbazaar.com>"
+    "Dmitri Zagidulin <dmitriz@digitalbazaar.com>",
+    "Sphereon <dev@sphereon.com>"
   ],
   "repository": {
     "type": "git",
