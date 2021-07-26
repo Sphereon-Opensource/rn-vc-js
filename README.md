@@ -50,8 +50,7 @@ the following:
 
 ## Install
 
-- Node.js 8.3+ required.
-- Node.js 10.12.0+ is highly recommended due to RSA key generation speed.
+- Node.js 12+ required.
 
 To install locally (for development):
 
@@ -63,6 +62,24 @@ npm install
 
 ## Usage
 
+### Setting up a signature suite
+
+For signing, when setting up a signature suite, you will need to pass in
+a key pair containing a private key.
+
+```js
+import vc from '@digitalbazaar/vc';
+
+// Required to set up a suite instance with private key
+import {Ed25519VerificationKey2020} from
+  '@digitalbazaar/ed25519-verification-key-2020';
+import {Ed25519Signature2020} from '@digitalbazaar/ed25519-signature-2020';
+
+const keyPair = await Ed25519VerificationKey2020.generate();
+
+const suite = new Ed25519Signature2020({key: keyPair});
+```
+
 ### Issuing a Verifiable Credential
 
 Pre-requisites:
@@ -73,7 +90,7 @@ Pre-requisites:
   Document and Public Key
 
 ```js
-const vc = require('vc-js');
+const vc = require('@digitalbazaar/vc');
 
 // Sample unsigned credential
 const credential = {
@@ -105,7 +122,7 @@ Pre-requisites:
 * (Recommended) You have a strategy for where to publish your Controller
   Documents and Public Keys
 
-#### Creating an Unsigned Presentation
+#### Creating an unsigned presentation
 
 To create a presentation out of one or more verifiable credentials, you can
 use the `createPresentation()` convenience function. Alternatively, you can
@@ -184,8 +201,8 @@ Pre-requisites:
 // contexts are loaded from jsonld-signatures
 // and not an insecure source.
 const {extendContextLoader} = require('react-native-jsonld-signatures');
-const vc = require('vc-js');
-// vc-js exports its own secure documentLoader.
+const vc = require('@digitalbazaar/vc');
+// @digitalbazaar/vc exports its own secure documentLoader.
 const {defaultDocumentLoader} = vc;
 // a valid json-ld @context.
 const myCustomContext = require('./myCustomContext');

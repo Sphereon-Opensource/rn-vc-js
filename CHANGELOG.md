@@ -1,4 +1,15 @@
-# vc-js ChangeLog
+# @digitalbazaar/vc ChangeLog
+
+## 1.0.0 - 2021-04-22
+
+### Changed
+- **BREAKING**: Rename library to `@digitalbazaar/vc`.
+- Update dependencies.
+
+### Removed
+- **BREAKING**: Remove typescript def generation support.
+- **BREAKING**: No longer shipping browser bundles.
+- **BREAKING**: Move binaries from `bin/` to `@digitalbazaar/vc-js-cli`.
 
 ## 0.6.4 - 2020-05-22
 

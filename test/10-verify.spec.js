@@ -1,14 +1,18 @@
+/*!
+ * Copyright (c) 2019-2021 Digital Bazaar, Inc. All rights reserved.
+ */
 const chai = require('chai');
 const should = chai.should();
 
-const {Ed25519KeyPair} = require('crypto-ld');
+const {Ed25519VerificationKey2018} =
+  require('@digitalbazaar/ed25519-verification-key-2018');
 const jsigs = require('react-native-jsonld-signatures');
 const jsonld = require('jsonld');
-const {Ed25519Signature2018} = jsigs.suites;
+const {Ed25519Signature2018} = require('@digitalbazaar/ed25519-signature-2018');
 const CredentialIssuancePurpose = require('../lib/CredentialIssuancePurpose');
 
 const mockData = require('./mocks/mock.data');
-const uuid = require('uuid/v4');
+const {v4: uuid} = require('uuid');
 const vc = require('..');
 const MultiLoader = require('./MultiLoader');
 const realContexts = require('../lib/contexts');
@@ -46,12 +50,14 @@ const testLoader = new MultiLoader({
   ]
 });
 
-let suite, keyPair, verifiableCredential;
+let suite;
+let keyPair;
+let verifiableCredential;
 const documentLoader = testLoader.documentLoader.bind(testLoader);
 
 before(async () => {
   // Set up the key that will be signing and verifying
-  keyPair = await Ed25519KeyPair.generate({
+  keyPair = await Ed25519VerificationKey2018.generate({
     id: 'https://example.edu/issuers/keys/1',
     controller: 'https://example.edu/issuers/565049'
   });
@@ -64,10 +70,11 @@ before(async () => {
   // Register the controller document and the key document with documentLoader
   contexts['https://example.edu/issuers/565049'] = assertionController;
   // FIXME this might require a security context.
-  contexts['https://example.edu/issuers/keys/1'] = keyPair.publicNode();
+  contexts['https://example.edu/issuers/keys/1'] =
+    keyPair.export({publicKey: true});
 
   // Set up the signature suite, using the generated key
-  suite = new jsigs.suites.Ed25519Signature2018({
+  suite = new Ed25519Signature2018({
     verificationMethod: 'https://example.edu/issuers/keys/1',
     key: keyPair
   });
@@ -86,9 +93,9 @@ describe('vc.issue()', () => {
   });
 
   it('should throw an error on missing verificationMethod', async () => {
-    const suite = new jsigs.suites.Ed25519Signature2018({
+    const suite = new Ed25519Signature2018({
       // Note no key id or verificationMethod passed to suite
-      key: await Ed25519KeyPair.generate()
+      key: await Ed25519VerificationKey2018.generate()
     });
     let error;
     try {
@@ -149,27 +156,6 @@ describe('vc.signPresentation()', () => {
   });
 });
 
-describe('verifies RFC3339 Dates', function() {
-  it('verify a valid date', function() {
-    const latest = new Date().toISOString();
-    vc.dateRegex.test(latest).should.be.true;
-  });
-  it('verify a valid date with lowercase t', function() {
-    const latest = new Date().toISOString().toLowerCase();
-    vc.dateRegex.test(latest).should.be.true;
-  });
-
-  it('should not verify an invalid date', function() {
-    const invalid = '2017/09/27';
-    vc.dateRegex.test(invalid).should.be.false;
-  });
-  it('should not verify 2 digit years', function() {
-    const invalid = '17-09-27T22:07:22.563z';
-    vc.dateRegex.test(invalid).should.be.false;
-  });
-
-});
-
 describe('verify API (credentials)', () => {
   it('should verify a vc', async () => {
     verifiableCredential = await vc.issue({
@@ -208,8 +194,8 @@ describe('verify API (credentials)', () => {
     result.verified.should.be.true;
   });
 
-  describe('negative tests', async () => {
-    it('fails to verify if a context is null', async () => {
+  describe('negative test', async () => {
+    it('fails to verify if a context resolves to null', async () => {
       const {credential, suite} = await _generateCredential();
       credential['@context'].push(invalidContexts.nullDoc.url);
       const results = await vc.verifyCredential({
@@ -349,13 +335,11 @@ describe('verify API (presentations)', () => {
   });
 });
 
-describe('tests for multiple credentials', async () => {
-
+describe('test for multiple credentials', async () => {
   const credentialsCount = [5, 25, 50, 100];
 
   for(const count of credentialsCount) {
-    it('cause error when credentials are tampered', async function() {
-      this.timeout(10000);
+    it('cause error when credentials are tampered', async () => {
       const challenge = uuid();
       const {presentation, suite: vcSuite, documentLoader} =
         await _generatePresentation({challenge, credentialsCount: count});
@@ -399,8 +383,7 @@ describe('tests for multiple credentials', async () => {
       firstErrorMsg.should.contain('Invalid signature.');
     });
 
-    it('should not cause error when credentials are correct', async function() {
-      this.timeout(10000);
+    it('should not cause error when credentials are correct', async () => {
       const challenge = uuid();
       const {presentation, suite: vcSuite, documentLoader} =
         await _generatePresentation({challenge, credentialsCount: count});
@@ -487,15 +470,16 @@ async function _loadDid() {
   const didDocument = new VeresOneDidDoc({doc: mockDidDoc});
   await didDocument.importKeys(mockDidKeys.keys);
   const documentLoader = url => {
+    let document;
     if(url.includes('#')) {
-      return {
-        contextUrl: null, document: didDocument.keys[url], documentUrl: url
-      };
-    } else {
-      return {
-        contextUrl: null, document: didDocument.doc, documentUrl: url
-      };
+      document = didDocument.keys[url];
+    } else if(url === didDocument.doc.id) {
+      document = didDocument.doc;
     }
+    if(document) {
+      return {contextUrl: null, document, documentUrl: url};
+    }
+    throw new Error(`"${url}" not authorized to be resolved.`);
   };
   return {
     didDocument, documentLoader
