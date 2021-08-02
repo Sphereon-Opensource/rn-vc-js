@@ -1,5 +1,5 @@
 const {contexts: credentialsContext, constants: {CREDENTIALS_CONTEXT_V1_URL}} =
-  require('react-native-credentials-context');
+  require('@sphereon/rn-w3c-credentials-context');
 const {contexts: didContext, constants: {DID_CONTEXT_URL}} =
   require('did-context');
 const {contexts: contextV1, constants: {VERES_ONE_CONTEXT_V1_URL}} =

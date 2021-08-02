@@ -200,7 +200,7 @@ Pre-requisites:
 // by requiring this first you ensure security
 // contexts are loaded from jsonld-signatures
 // and not an insecure source.
-const {extendContextLoader} = require('react-native-jsonld-signatures');
+const {extendContextLoader} = require('@sphereon/rn-jsonld-signatures');
 const vc = require('@digitalbazaar/vc');
 // @digitalbazaar/vc exports its own secure documentLoader.
 const {defaultDocumentLoader} = vc;
