@@ -55,8 +55,8 @@ the following:
 To install locally (for development):
 
 ```
-git clone https://github.com/digitalbazaar/vc-js.git
-cd vc-js
+git clone https://github.com/Sphereon-OpenSource/rn-vc-js.git
+cd rn-vc-js
 npm install
 ```
 
@@ -68,7 +68,7 @@ For signing, when setting up a signature suite, you will need to pass in
 a key pair containing a private key.
 
 ```js
-import vc from '@digitalbazaar/vc';
+import vc from '@sphereon/rn-vc-js';
 
 // Required to set up a suite instance with private key
 import {Ed25519VerificationKey2020} from
@@ -90,7 +90,7 @@ Pre-requisites:
   Document and Public Key
 
 ```js
-const vc = require('@digitalbazaar/vc');
+const vc = require('@sphereon/rn-vc-js');
 
 // Sample unsigned credential
 const credential = {
@@ -200,8 +200,8 @@ Pre-requisites:
 // by requiring this first you ensure security
 // contexts are loaded from jsonld-signatures
 // and not an insecure source.
-const {extendContextLoader} = require('react-native-jsonld-signatures');
-const vc = require('@digitalbazaar/vc');
+const {extendContextLoader} = require('@sphereon/rn-jsonld-signatures');
+const vc = require('@sphereon/rn-vc-js');
 // @digitalbazaar/vc exports its own secure documentLoader.
 const {defaultDocumentLoader} = vc;
 // a valid json-ld @context.
@@ -229,7 +229,7 @@ const vp = await vc.signPresentation({
 const signedVC = await vc.issue({credential, suite, documentLoader});
 
 // or
-const result = await vc.verify({credential, suite, documentLoader});
+const result = await vc.verifyCredential({credential: signedVC, suite, documentLoader});
 
 ```
 
@@ -374,11 +374,12 @@ npm run test-karma
 ```
 
 ## Releasing
-Use the following commands to authenticate with Nexus and publish:
+Use the following commands to publish the package to npmjs.org:
 ```
-npm adduser --registry=https://nexus.qa.sphereon.com/repository/sphereon-opensource-npm/
-npm publish
+npm login
+npm publish --access public
 ```
+
 
 ## Contribute
 
@@ -391,9 +392,25 @@ Note: If editing the Readme, please conform to the
 
 ## Commercial Support
 
-Commercial support for this library is available upon request from
+Commercial support for the React Native version of this library is available upon request from
+Sphereon: support@sphereon.com
+
+
+Commercial support for the node version of this library is available upon request from
 Digital Bazaar: support@digitalbazaar.com
 
 ## License
 
 [New BSD License (3-clause)](LICENSE) © Digital Bazaar
+
+## Source
+The source code for the React Native implementation of the VC-JS API available at:
+
+https://github.com/Sphereon-Opensource/rn-vc-js
+
+
+The source code for the Node and Browser implementation of the VC-JS API
+is available at:
+
+https://github.com/digitalbazaar/vc-js
+
